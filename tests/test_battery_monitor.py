@@ -26,7 +26,7 @@ class TestEvaluateTemperature(unittest.TestCase):
         self.assertEqual(evaluate_temperature(35), NORMAL)
         
     def test_temperature_below_warning_threshold(self):
-        self.assertEqual(evaluate_temperature(44.9), WARNING)
+        self.assertEqual(evaluate_temperature(44.9), NORMAL)
         
     def test_warning_at_lower_boundary(self):
         self.assertEqual(evaluate_temperature(45), WARNING)
