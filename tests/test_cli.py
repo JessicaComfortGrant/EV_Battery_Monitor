@@ -19,7 +19,65 @@ class TestGetFloatInput(unittest.TestCase):
         mock_print.assert_called_once_with(
             "Invalid input. Please enter a number"
             )
+    
+    @patch("builtins.input", side_effect=["-400", "400"])
+    @patch("builtins.print")
+    def test_negative_voltage_rejected(self, mock_print, mock_input):
+        result = get_float_input(
+            "Enter voltage: ",
+            minimum=0.0
+        )
+
+        self.assertEqual(result, 400.0)
+        mock_print.assert_called_once_with(
+            "Value must be at least 0.0. Please try again."
+        )
         
+        
+    @patch("builtins.input", side_effect=["-50", "20"])
+    @patch("builtins.print")
+    def test_temperature_below_minimum_rejected(
+        self,
+        mock_print,
+        mock_input
+    ):
+        result = get_float_input(
+            "Enter temperature: ",
+            minimum=-40.0,
+            maximum=100.0
+        )
+
+        self.assertEqual(result, 20.0)
+        mock_print.assert_called_once_with(
+            "Value must be at least -40.0. Please try again."
+        )
+        
+        
+    @patch("builtins.input", side_effect=["120", "50"])
+    @patch("builtins.print")
+    def test_temperature_above_maximum_rejected(
+        self,
+        mock_print,
+        mock_input
+    ):
+        result = get_float_input(
+            "Enter temperature: ",
+            minimum=-40.0,
+            maximum=100.0
+        )
+
+        self.assertEqual(result, 50.0)
+        mock_print.assert_called_once_with(
+            "Value must be at most 100.0. Please try again."
+        )
+        
+        
+    @patch("builtins.input", return_value="-50")
+    def test_negative_current_is_allowed(self, mock_input):
+        result = get_float_input("Enter current: ")
+
+        self.assertEqual(result, -50.0)       
+     
     
     class TestDisplayResult(unittest.TestCase):
         

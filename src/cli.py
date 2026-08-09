@@ -1,10 +1,10 @@
 from src.battery_monitor import monitor_battery
 
-def get_float_input(prompt):
+def get_float_input(prompt, minimum=None, maximum=None):
     """Get a valid floating-point number from the user."""
     while True:
         try:
-            return float(input(prompt))
+            value = float(input(prompt))
         except ValueError:
             print("Invalid input. Please enter a number")
             continue
