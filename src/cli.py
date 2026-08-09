@@ -29,10 +29,10 @@ def display_result(result):
     
     print(f"Voltage: {result['voltage']:.2f} V")
     print(f"Current: {result['current']:.2f} A")
-    print(f"Power: {result['power']:.2f} kW")
     print(f"Temperature: {result['temperature']:.2f} °C")
     
-    print(f"\nTemperature Status:  {result['temperature_status']}")
+    print(f"\nPower: {result['power']:.2f} kW")
+    print(f"Temperature Status:  {result['temperature_status']}")
     print(f"Battery Status:      {result['battery_status']}")
 
 def main():
