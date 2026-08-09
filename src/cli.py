@@ -7,6 +7,17 @@ def get_float_input(prompt):
             return float(input(prompt))
         except ValueError:
             print("Invalid input. Please enter a number")
+            continue
+        
+        if minimum is not None and value < minimum:
+            print(f"Value must be at least {minimum}. Please try again.")
+            continue
+        
+        if maximum is not None and value > maximum:
+            print(f"Value must be at most {maximum}. Please try again.")
+            continue
+        
+        return value
             
 
 def display_result(result):
@@ -31,9 +42,23 @@ def main():
     print("       EV BATTERY MONITOR")
     print("=" * 40 )
     
-    voltage = get_float_input("Enter battery voltage (V): ")
-    current = get_float_input("Enter battery current (A): ")
-    temperature = get_float_input("Enter battery temperature (°C): ")
+    voltage = get_float_input(
+        "Enter battery voltage (V): ",
+        minimum=0.0
+    )
+    
+    
+    current = get_float_input(
+        "Enter battery current (A): ",
+        minimum=0.0
+    )
+    
+    
+    temperature = get_float_input(
+        "Enter battery temperature (°C): ",
+        minimum=-40,
+        maximum=100
+    )
 
     result = monitor_battery(
         voltage, 
