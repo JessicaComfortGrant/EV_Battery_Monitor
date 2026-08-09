@@ -3,8 +3,11 @@ import unittest
 from src.battery_monitor import (
     calculate_battery_power,
     evaluate_temperature,
+    evaluate_voltage,
     determine_battery_status,
     monitor_battery,
+    LOW,
+    HIGH,
     NORMAL,
     WARNING,
     CRITICAL,
@@ -75,6 +78,24 @@ class TestMonitorBattery(unittest.TestCase):
         self.assertEqual(result["power"], 20.0)
         self.assertEqual(result["temperature_status"], CRITICAL)
         self.assertEqual(result["battery_status"], CRITICAL)
+        
+
+class TestEvaluateVoltage(unittest.TestCase):
+
+    def test_low_voltage(self):
+        self.assertEqual(evaluate_voltage(299), LOW)
+
+    def test_normal_voltage(self):
+        self.assertEqual(evaluate_voltage(400), NORMAL)
+
+    def test_high_voltage(self):
+        self.assertEqual(evaluate_voltage(451), HIGH)
+
+    def test_normal_at_lower_boundary(self):
+        self.assertEqual(evaluate_voltage(300), NORMAL)
+
+    def test_normal_at_upper_boundary(self):
+        self.assertEqual(evaluate_voltage(450), NORMAL)
 
 
 if __name__ == "__main__":

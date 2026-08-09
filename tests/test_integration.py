@@ -40,6 +40,36 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
         self.assertEqual(result["power"], 20.0)
         self.assertEqual(result["temperature_status"], "CRITICAL")
         self.assertEqual(result["battery_status"], "CRITICAL")
+      
+        
+    def test_low_voltage_integration(self):
+        result = monitor_battery(
+            voltage=299,
+            current=50,
+            temperature=35
+        )
+
+        self.assertEqual(result["voltage_status"], "LOW")
+
+
+    def test_normal_voltage_integration(self):
+        result = monitor_battery(
+            voltage=400,
+            current=50,
+            temperature=35
+        )
+
+        self.assertEqual(result["voltage_status"], "NORMAL")
+
+
+    def test_high_voltage_integration(self):
+        result = monitor_battery(
+            voltage=451,
+            current=50,
+            temperature=35
+        )
+
+        self.assertEqual(result["voltage_status"], "HIGH")
 
 
 if __name__ == "__main__":

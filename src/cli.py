@@ -27,13 +27,16 @@ def display_result(result):
     print("BATTERY MONITORING RESULT")
     print("-" * 40)
     
-    print(f"Voltage: {result['voltage']:.2f} V")
-    print(f"Current: {result['current']:.2f} A")
-    print(f"Temperature: {result['temperature']:.2f} °C")
-    
-    print(f"\nPower: {result['power']:.2f} kW")
+    print(f"Voltage:             {result['voltage']:.2f} V")
+    print(f"Voltage Status:      {result['voltage_status']}")
+
+    print(f"\nCurrent:             {result['current']:.2f} A")
+    print(f"Power:               {result['power']:.2f} kW")
+
+    print(f"\nTemperature:         {result['temperature']:.2f} °C")
     print(f"Temperature Status:  {result['temperature_status']}")
-    print(f"Battery Status:      {result['battery_status']}")
+
+    print(f"\nBattery Status:      {result['battery_status']}")
 
 def main():
     """Run the EV Battery Monitor CLI."""
