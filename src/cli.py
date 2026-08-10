@@ -1,3 +1,5 @@
+from unittest import result
+
 from src.battery_monitor import monitor_battery
 
 def get_float_input(prompt, minimum=None, maximum=None):
@@ -32,10 +34,14 @@ def display_result(result):
 
     print(f"\nCurrent:             {result['current']:.2f} A")
     print(f"Current Status:      {result['current_status']}")
-    print(f"Power:               {result['power']:.2f} kW")
+    
+    print(f"\nPower:               {result['power']:.2f} kW")
 
     print(f"\nTemperature:         {result['temperature']:.2f} °C")
     print(f"Temperature Status:  {result['temperature_status']}")
+    
+    print(f"\nState of Charge:     {result['soc']:.2f} %")
+    print(f"SOC Status:          {result['soc_status']}")
 
     print(f"\nBattery Status:      {result['battery_status']}")
 
@@ -63,12 +69,20 @@ def main():
         minimum=-40,
         maximum=100
     )
+    
+    soc = get_float_input(
+        "Enter battery state of charge (%): ",
+        minimum=0.0,
+        maximum=100.0
+        )
 
     result = monitor_battery(
-        voltage, 
-        current, 
-        temperature
+        voltage=voltage,
+        current=current,
+        temperature=temperature,
+        soc=soc
     )
+    
     
     display_result(result)
 

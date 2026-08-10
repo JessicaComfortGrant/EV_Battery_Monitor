@@ -28,6 +28,17 @@ def evaluate_current(current):
         return HIGH   
 
 
+def evaluate_soc(soc):
+    """Evaluate state of charge and return status."""
+
+    if soc < 20:
+        return LOW
+    elif soc <= 80:
+        return NORMAL
+    else:
+        return HIGH
+    
+
 def evaluate_temperature(temperature):
     """Evaluate battery temperature and return status."""
     if temperature < 45:
@@ -42,22 +53,30 @@ def determine_battery_status(temperature_status):
      return temperature_status
  
 
-def monitor_battery(voltage, current, temperature):
+def monitor_battery(voltage, current, temperature, soc):
     """Monitor battery electrical and thermal conditions."""
 
     power = calculate_battery_power(voltage, current)
-    temperature_status = evaluate_temperature(temperature)
     voltage_status = evaluate_voltage(voltage)
     current_status = evaluate_current(current)
+    soc_status = evaluate_soc(soc)
+    temperature_status = evaluate_temperature(temperature)
     battery_status = determine_battery_status(temperature_status)
 
     return {
         "voltage": voltage,
-        "current": current,
-        "temperature": temperature,
-        "power": power,
         "voltage_status": voltage_status,
+        
+        "current": current,
         "current_status": current_status,
+        
+        "power": power,
+        
+        "temperature": temperature,
         "temperature_status": temperature_status,
+        
+        "soc": soc,
+        "soc_status": soc_status,
+        
         "battery_status": battery_status,
     }
