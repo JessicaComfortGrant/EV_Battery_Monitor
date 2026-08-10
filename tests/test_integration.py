@@ -70,6 +70,33 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
         )
 
         self.assertEqual(result["voltage_status"], "HIGH")
+        
+    def test_low_current_integration(self):
+        result = monitor_battery(
+            voltage=400,
+            current=24,
+            temperature=35
+        )
+
+        self.assertEqual(result["current_status"], "LOW")
+    
+    def test_normal_current_integration(self):
+        result = monitor_battery(
+            voltage=400,
+            current=40,
+            temperature=35
+        )
+
+        self.assertEqual(result["current_status"], "NORMAL")
+        
+    def test_high_current_integration(self):
+        result = monitor_battery(
+            voltage=400,
+            current=51,
+            temperature=35
+        )
+
+        self.assertEqual(result["current_status"], "HIGH")
 
 
 if __name__ == "__main__":

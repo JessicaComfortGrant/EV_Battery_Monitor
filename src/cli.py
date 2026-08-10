@@ -31,6 +31,7 @@ def display_result(result):
     print(f"Voltage Status:      {result['voltage_status']}")
 
     print(f"\nCurrent:             {result['current']:.2f} A")
+    print(f"Current Status:      {result['current_status']}")
     print(f"Power:               {result['power']:.2f} kW")
 
     print(f"\nTemperature:         {result['temperature']:.2f} °C")

@@ -4,6 +4,7 @@ from src.battery_monitor import (
     calculate_battery_power,
     evaluate_temperature,
     evaluate_voltage,
+    evaluate_current,
     determine_battery_status,
     monitor_battery,
     LOW,
@@ -96,6 +97,24 @@ class TestEvaluateVoltage(unittest.TestCase):
 
     def test_normal_at_upper_boundary(self):
         self.assertEqual(evaluate_voltage(450), NORMAL)
+        
+
+class TestEvaluateCurrent(unittest.TestCase):
+    
+    def test_low_current(self):
+        self.assertEqual(evaluate_current(24.9), LOW)
+    
+    def test_normal_at_lower_boundary(self):
+            self.assertEqual(evaluate_current(25), NORMAL)
+        
+    def test_normal_current(self):
+        self.assertEqual(evaluate_current(40), NORMAL)
+    
+    def test_normal_at_upper_boundary(self):
+            self.assertEqual(evaluate_current(50), NORMAL)
+   
+    def test_high_current(self):
+        self.assertEqual(evaluate_current(50.1), HIGH)
 
 
 if __name__ == "__main__":

@@ -17,6 +17,17 @@ def evaluate_voltage(voltage):
     else:
         return HIGH
 
+def evaluate_current(current):
+    """Evaluate current and return status."""
+
+    if current < 25:
+        return LOW
+    elif current <= 50:
+        return NORMAL
+    else:
+        return HIGH   
+
+
 def evaluate_temperature(temperature):
     """Evaluate battery temperature and return status."""
     if temperature < 45:
@@ -37,6 +48,7 @@ def monitor_battery(voltage, current, temperature):
     power = calculate_battery_power(voltage, current)
     temperature_status = evaluate_temperature(temperature)
     voltage_status = evaluate_voltage(voltage)
+    current_status = evaluate_current(current)
     battery_status = determine_battery_status(temperature_status)
 
     return {
@@ -45,6 +57,7 @@ def monitor_battery(voltage, current, temperature):
         "temperature": temperature,
         "power": power,
         "voltage_status": voltage_status,
+        "current_status": current_status,
         "temperature_status": temperature_status,
         "battery_status": battery_status,
     }
