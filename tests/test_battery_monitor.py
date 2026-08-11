@@ -48,14 +48,108 @@ class TestEvaluateTemperature(unittest.TestCase):
         
 class TestBatteryStatus(unittest.TestCase):
     def test_normal_status(self):
-        self.assertEqual(determine_battery_status(NORMAL), NORMAL)
+        self.assertEqual(
+            determine_battery_status(
+                NORMAL,
+                NORMAL,
+                NORMAL,
+                NORMAL                 
+            ),
+            NORMAL
+        )
         
     def test_warning_status(self):
-        self.assertEqual(determine_battery_status(WARNING), WARNING)
+        self.assertEqual(
+            determine_battery_status(
+                NORMAL,
+                NORMAL,
+                WARNING,
+                NORMAL
+            ),
+            WARNING
+        )
         
     def test_critical_status(self):
-        self.assertEqual(determine_battery_status(CRITICAL), CRITICAL)
+        self.assertEqual(
+            determine_battery_status(
+                NORMAL,
+                NORMAL,
+                CRITICAL,
+                NORMAL
+            ),
+            CRITICAL
+        )
+        
+    def test_voltage_low_is_health_indicator(self):
+        self.assertEqual(
+            determine_battery_status(
+                LOW,
+                NORMAL,
+                NORMAL,
+                NORMAL
+            ),
+            NORMAL
+        )
 
+    def test_voltage_high_is_health_indicator(self):
+        self.assertEqual(
+            determine_battery_status(
+                HIGH,
+                NORMAL,
+                NORMAL,
+                NORMAL
+            ),
+            NORMAL
+        )
+
+    def test_current_low_is_health_indicator(self):
+        self.assertEqual(
+            determine_battery_status(
+                NORMAL,
+                LOW,
+                NORMAL,
+                NORMAL
+            ),
+            NORMAL
+        )
+
+    def test_current_high_is_health_indicator(self):
+        self.assertEqual(
+            determine_battery_status(
+                NORMAL,
+                HIGH,
+                NORMAL,
+                NORMAL
+            ),
+            NORMAL
+        )
+
+    def test_low_soc_is_health_indicator(self):
+        self.assertEqual(
+            determine_battery_status(
+                NORMAL,
+                NORMAL,
+                NORMAL,
+                LOW
+            ),
+            NORMAL
+        )
+
+    def test_high_soc_is_health_indicator(self):
+        self.assertEqual(
+            determine_battery_status(
+                NORMAL,
+                NORMAL,
+                NORMAL,
+                HIGH
+            ),
+            NORMAL
+        )
+    
+    
+    
+        
+                
 
 class TestMonitorBattery(unittest.TestCase):
     def test_healthy_battery(self):

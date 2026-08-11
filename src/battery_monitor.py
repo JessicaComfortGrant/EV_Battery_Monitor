@@ -48,9 +48,22 @@ def evaluate_temperature(temperature):
     else:
         return CRITICAL
     
-def determine_battery_status(temperature_status):
-     """Determine overall battery status."""
-     return temperature_status
+def determine_battery_status(
+    voltage_status,
+    current_status,
+    temperature_status,
+    soc_status
+):
+    """Determine overall battery health status."""
+
+    if temperature_status == CRITICAL:
+        return CRITICAL
+
+    elif temperature_status == WARNING:
+        return WARNING
+
+    else:
+        return NORMAL
  
 
 def monitor_battery(voltage, current, temperature, soc):
@@ -61,7 +74,13 @@ def monitor_battery(voltage, current, temperature, soc):
     current_status = evaluate_current(current)
     soc_status = evaluate_soc(soc)
     temperature_status = evaluate_temperature(temperature)
-    battery_status = determine_battery_status(temperature_status)
+    
+    battery_status = determine_battery_status(
+        voltage_status,
+        current_status,
+        temperature_status,
+        soc_status
+    )
 
     return {
         "voltage": voltage,
