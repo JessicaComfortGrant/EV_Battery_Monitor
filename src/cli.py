@@ -1,5 +1,3 @@
-from unittest import result
-
 from src.battery_monitor import monitor_battery
 
 def get_float_input(prompt, minimum=None, maximum=None):
@@ -42,8 +40,10 @@ def display_result(result):
     
     print(f"\nState of Charge:     {result['soc']:.2f} %")
     print(f"SOC Status:          {result['soc_status']}")
-
-    print(f"\nBattery Status:      {result['battery_status']}")
+    
+    print("\n" + "-" * 40)
+    print(f"Battery Status:      {result['battery_status']}")
+    print("-" * 40)
 
 def main():
     """Run the EV Battery Monitor CLI."""
@@ -52,6 +52,9 @@ def main():
     print("       EV BATTERY MONITOR")
     print("=" * 40 )
     
+    print("\nEnter the following battery parameters:")
+    print("-" * 40 )
+    
     voltage = get_float_input(
         "Enter battery voltage (V): ",
         minimum=0.0
@@ -59,8 +62,7 @@ def main():
     
     
     current = get_float_input(
-        "Enter battery current (A): ",
-        minimum=0.0
+        "Enter battery current (A): "
     )
     
     
