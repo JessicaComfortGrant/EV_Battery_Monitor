@@ -1,3 +1,9 @@
+import logging
+
+from src.logger import setup_logger
+
+logger = setup_logger()
+
 HIGH = "HIGH"
 LOW = "LOW"
 NORMAL = "NORMAL"
@@ -81,6 +87,13 @@ def monitor_battery(voltage, current, temperature, soc):
         temperature_status,
         soc_status
     )
+    
+    if battery_status == CRITICAL:
+        logger.critical("Battery status: CRITICAL")
+    elif battery_status == WARNING:
+        logger.warning("Battery status: WARNING")
+    else:
+        logger.info("Battery status: NORMAL")
 
     return {
         "voltage": voltage,
