@@ -8,11 +8,7 @@ from src.battery_monitor import (
     evaluate_soc,
     determine_battery_status,
     monitor_battery,
-    LOW,
-    HIGH,
-    NORMAL,
-    WARNING,
-    CRITICAL,
+    Status
 )
 
 class TestCalculatePower(unittest.TestCase):
@@ -28,122 +24,122 @@ class TestCalculatePower(unittest.TestCase):
         
 class TestEvaluateTemperature(unittest.TestCase):
     def test_normal_temperature(self):
-        self.assertEqual(evaluate_temperature(35), NORMAL)
+        self.assertEqual(evaluate_temperature(35), Status.NORMAL)
         
     def test_temperature_below_warning_threshold(self):
-        self.assertEqual(evaluate_temperature(44.9), NORMAL)
+        self.assertEqual(evaluate_temperature(44.9), Status.NORMAL)
         
     def test_warning_at_lower_boundary(self):
-        self.assertEqual(evaluate_temperature(45), WARNING)
+        self.assertEqual(evaluate_temperature(45), Status.WARNING)
         
     def test_warning_at_upper_boundary(self):
-        self.assertEqual(evaluate_temperature(60), WARNING)
+        self.assertEqual(evaluate_temperature(60), Status.WARNING)
         
     def test_critical_above_threshold(self):
-        self.assertEqual(evaluate_temperature(60.1), CRITICAL)
+        self.assertEqual(evaluate_temperature(60.1), Status.CRITICAL)
         
     def test_high_temperature(self):
-        self.assertEqual(evaluate_temperature(80), CRITICAL)
+        self.assertEqual(evaluate_temperature(80), Status.CRITICAL)
         
         
 class TestBatteryStatus(unittest.TestCase):
     def test_normal_status(self):
         self.assertEqual(
             determine_battery_status(
-                NORMAL,
-                NORMAL,
-                NORMAL,
-                NORMAL                 
+                Status.NORMAL,
+                Status.NORMAL,
+                Status.NORMAL,
+                Status.NORMAL                 
             ),
-            NORMAL
+            Status.NORMAL
         )
         
     def test_warning_status(self):
         self.assertEqual(
             determine_battery_status(
-                NORMAL,
-                NORMAL,
-                WARNING,
-                NORMAL
+                Status.NORMAL,
+                Status.NORMAL,
+                Status.WARNING,
+                Status.NORMAL
             ),
-            WARNING
+            Status.WARNING
         )
         
     def test_critical_status(self):
         self.assertEqual(
             determine_battery_status(
-                NORMAL,
-                NORMAL,
-                CRITICAL,
-                NORMAL
+                Status.NORMAL,
+                Status.NORMAL,
+                Status.CRITICAL,
+                Status.NORMAL
             ),
-            CRITICAL
+            Status.CRITICAL
         )
         
     def test_voltage_low_is_health_indicator(self):
         self.assertEqual(
             determine_battery_status(
-                LOW,
-                NORMAL,
-                NORMAL,
-                NORMAL
+                Status.LOW,
+                Status.NORMAL,
+                Status.NORMAL,
+                Status.NORMAL
             ),
-            NORMAL
+            Status.NORMAL
         )
 
     def test_voltage_high_is_health_indicator(self):
         self.assertEqual(
             determine_battery_status(
-                HIGH,
-                NORMAL,
-                NORMAL,
-                NORMAL
+                Status.HIGH,
+                Status.NORMAL,
+                Status.NORMAL,
+                Status.NORMAL
             ),
-            NORMAL
+            Status.NORMAL
         )
 
     def test_current_low_is_health_indicator(self):
         self.assertEqual(
             determine_battery_status(
-                NORMAL,
-                LOW,
-                NORMAL,
-                NORMAL
+                Status.NORMAL,
+                Status.LOW,
+                Status.NORMAL,
+                Status.NORMAL
             ),
-            NORMAL
+            Status.NORMAL
         )
 
     def test_current_high_is_health_indicator(self):
         self.assertEqual(
             determine_battery_status(
-                NORMAL,
-                HIGH,
-                NORMAL,
-                NORMAL
+                Status.NORMAL,
+                Status.HIGH,
+                Status.NORMAL,
+                Status.NORMAL
             ),
-            NORMAL
+            Status.NORMAL
         )
 
     def test_low_soc_is_health_indicator(self):
         self.assertEqual(
             determine_battery_status(
-                NORMAL,
-                NORMAL,
-                NORMAL,
-                LOW
+                Status.NORMAL,
+                Status.NORMAL,
+                Status.NORMAL,
+                Status.LOW
             ),
-            NORMAL
+            Status.NORMAL
         )
 
     def test_high_soc_is_health_indicator(self):
         self.assertEqual(
             determine_battery_status(
-                NORMAL,
-                NORMAL,
-                NORMAL,
-                HIGH
+                Status.NORMAL,
+                Status.NORMAL,
+                Status.NORMAL,
+                Status.HIGH
             ),
-            NORMAL
+            Status.NORMAL
         )
     
     
@@ -156,78 +152,77 @@ class TestMonitorBattery(unittest.TestCase):
         result = monitor_battery(400, 50, 35, 50)
         
         self.assertEqual(result["power"], 20.0)
-        self.assertEqual(result["temperature_status"], NORMAL)
-        self.assertEqual(result["battery_status"], NORMAL)
+        self.assertEqual(result["temperature_status"], Status.NORMAL)
+        self.assertEqual(result["battery_status"], Status.NORMAL)
         
     
     def test_warm_battery(self):
         result = monitor_battery(400, 50, 50, 50)
         
         self.assertEqual(result["power"], 20.0)
-        self.assertEqual(result["temperature_status"], WARNING)
-        self.assertEqual(result["battery_status"], WARNING)
-        
+        self.assertEqual(result["temperature_status"], Status.WARNING)
+        self.assertEqual(result["battery_status"], Status.WARNING)
         
     def test_overheated_battery(self):
         result = monitor_battery(400,50,65,50)
         
         self.assertEqual(result["power"], 20.0)
-        self.assertEqual(result["temperature_status"], CRITICAL)
-        self.assertEqual(result["battery_status"], CRITICAL)
+        self.assertEqual(result["temperature_status"], Status.CRITICAL)
+        self.assertEqual(result["battery_status"], Status.CRITICAL)
         
 
 class TestEvaluateVoltage(unittest.TestCase):
 
     def test_low_voltage(self):
-        self.assertEqual(evaluate_voltage(299), LOW)
+        self.assertEqual(evaluate_voltage(299), Status.LOW)
 
     def test_normal_voltage(self):
-        self.assertEqual(evaluate_voltage(400), NORMAL)
+        self.assertEqual(evaluate_voltage(400), Status.NORMAL)
 
     def test_high_voltage(self):
-        self.assertEqual(evaluate_voltage(451), HIGH)
+        self.assertEqual(evaluate_voltage(451), Status.HIGH)
 
     def test_normal_at_lower_boundary(self):
-        self.assertEqual(evaluate_voltage(300), NORMAL)
+        self.assertEqual(evaluate_voltage(300), Status.NORMAL)
 
     def test_normal_at_upper_boundary(self):
-        self.assertEqual(evaluate_voltage(450), NORMAL)
+        self.assertEqual(evaluate_voltage(450), Status.NORMAL)
         
 
 class TestEvaluateCurrent(unittest.TestCase):
     
     def test_low_current(self):
-        self.assertEqual(evaluate_current(24.9), LOW)
+        self.assertEqual(evaluate_current(24.9), Status.LOW)
     
     def test_normal_at_lower_boundary(self):
-            self.assertEqual(evaluate_current(25), NORMAL)
+            self.assertEqual(evaluate_current(25), Status.NORMAL)
         
     def test_normal_current(self):
-        self.assertEqual(evaluate_current(40), NORMAL)
+        self.assertEqual(evaluate_current(40), Status.NORMAL)
     
     def test_normal_at_upper_boundary(self):
-            self.assertEqual(evaluate_current(50), NORMAL)
+            self.assertEqual(evaluate_current(50), Status.NORMAL)
    
     def test_high_current(self):
-        self.assertEqual(evaluate_current(50.1), HIGH)
+        self.assertEqual(evaluate_current(50.1), Status.HIGH)
         
 
 class TestEvaluateSOC(unittest.TestCase):
     
     def test_low_soc(self):
-        self.assertEqual(evaluate_soc(19.9), LOW)
+        self.assertEqual(evaluate_soc(19.9), Status.LOW)
         
     def test_normal_at_lower_boundary(self):
-        self.assertEqual(evaluate_soc(20), NORMAL)
+        self.assertEqual(evaluate_soc(20), Status.NORMAL)
         
     def test_normal_soc(self):
-        self.assertEqual(evaluate_soc(50), NORMAL)
+        self.assertEqual(evaluate_soc(50), Status.NORMAL)
         
     def test_normal_at_upper_boundary(self):
-        self.assertEqual(evaluate_soc(80), NORMAL)
+        self.assertEqual(evaluate_soc(80), Status.NORMAL)
         
     def test_high_soc(self):
-        self.assertEqual(evaluate_soc(80.1), HIGH)
+        self.assertEqual(evaluate_soc(80.1), Status.HIGH)
 
 
 if __name__ == "__main__":

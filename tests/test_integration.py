@@ -1,6 +1,9 @@
 import unittest
 
-from src.battery_monitor import monitor_battery
+from src.battery_monitor import(
+    Status, 
+    monitor_battery
+    ) 
 
 
 class TestMonitorBatteryIntegration(unittest.TestCase):
@@ -17,9 +20,9 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
         self.assertEqual(result["current"], 50)
         self.assertEqual(result["temperature"], 35)
         self.assertEqual(result["power"], 20.0)
-        self.assertEqual(result["soc_status"], "NORMAL")
-        self.assertEqual(result["temperature_status"], "NORMAL")
-        self.assertEqual(result["battery_status"], "NORMAL")
+        self.assertEqual(result["soc_status"], Status.NORMAL)
+        self.assertEqual(result["temperature_status"], Status.NORMAL)
+        self.assertEqual(result["battery_status"], Status.NORMAL)
 
     def test_warning_battery_integration(self):
         result = monitor_battery(
@@ -30,9 +33,9 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
         )
 
         self.assertEqual(result["power"], 20.0)
-        self.assertEqual(result["temperature_status"], "WARNING")
-        self.assertEqual(result["battery_status"], "WARNING")
-        self.assertEqual(result["soc_status"], "NORMAL")
+        self.assertEqual(result["temperature_status"], Status.WARNING)
+        self.assertEqual(result["battery_status"], Status.WARNING)
+        self.assertEqual(result["soc_status"], Status.NORMAL)
 
     def test_critical_battery_integration(self):
         result = monitor_battery(
@@ -43,9 +46,9 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
         )
 
         self.assertEqual(result["power"], 20.0)
-        self.assertEqual(result["temperature_status"], "CRITICAL")
-        self.assertEqual(result["battery_status"], "CRITICAL")
-        self.assertEqual(result["soc_status"], "NORMAL")
+        self.assertEqual(result["temperature_status"], Status.CRITICAL)
+        self.assertEqual(result["battery_status"], Status.CRITICAL)
+        self.assertEqual(result["soc_status"], Status.NORMAL)
       
         
     def test_low_voltage_integration(self):
@@ -56,7 +59,7 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
             soc=50
         )
 
-        self.assertEqual(result["voltage_status"], "LOW")
+        self.assertEqual(result["voltage_status"], Status.LOW)
 
 
     def test_normal_voltage_integration(self):
@@ -67,7 +70,7 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
             soc=50
         )
 
-        self.assertEqual(result["voltage_status"], "NORMAL")
+        self.assertEqual(result["voltage_status"], Status.NORMAL)
 
 
     def test_high_voltage_integration(self):
@@ -78,7 +81,7 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
             soc=50
         )
 
-        self.assertEqual(result["voltage_status"], "HIGH")
+        self.assertEqual(result["voltage_status"], Status.HIGH)
         
     def test_low_current_integration(self):
         result = monitor_battery(
@@ -88,7 +91,7 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
             soc=50
         )
 
-        self.assertEqual(result["current_status"], "LOW")
+        self.assertEqual(result["current_status"], Status.LOW)
     
     def test_normal_current_integration(self):
         result = monitor_battery(
@@ -98,7 +101,7 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
             soc=50
         )
 
-        self.assertEqual(result["current_status"], "NORMAL")
+        self.assertEqual(result["current_status"], Status.NORMAL)
         self
         
     def test_high_current_integration(self):
@@ -109,8 +112,8 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
             soc=50
         )
 
-        self.assertEqual(result["current_status"], "HIGH")
-        self.assertEqual(result["soc_status"], "NORMAL")
+        self.assertEqual(result["current_status"], Status.HIGH)
+        self.assertEqual(result["soc_status"], Status.NORMAL)
         
         
     def test_low_soc_integration(self):
@@ -121,7 +124,7 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
             soc=10
         )
 
-        self.assertEqual(result["soc_status"], "LOW")
+        self.assertEqual(result["soc_status"], Status.LOW)
 
 
     def test_normal_soc_integration(self):
@@ -132,7 +135,7 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
             soc=50
         )
 
-        self.assertEqual(result["soc_status"], "NORMAL")
+        self.assertEqual(result["soc_status"], Status.NORMAL)
 
 
     def test_high_soc_integration(self):
@@ -143,7 +146,7 @@ class TestMonitorBatteryIntegration(unittest.TestCase):
             soc=90
         )
 
-        self.assertEqual(result["soc_status"], "HIGH")
+        self.assertEqual(result["soc_status"], Status.HIGH)
 
 
 if __name__ == "__main__":

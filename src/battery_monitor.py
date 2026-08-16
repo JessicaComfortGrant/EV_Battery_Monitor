@@ -1,12 +1,16 @@
+from enum import Enum
+
 from src.logger import setup_logger
 
 logger = setup_logger()
 
-HIGH = "HIGH"
-LOW = "LOW"
-NORMAL = "NORMAL"
-WARNING = "WARNING"
-CRITICAL = "CRITICAL"
+class Status(Enum):
+    """Enum for battery status levels."""
+    HIGH = "HIGH"
+    LOW = "LOW"
+    NORMAL = "NORMAL"
+    WARNING = "WARNING"
+    CRITICAL = "CRITICAL"
 
 def calculate_battery_power(voltage, current):
     """Calculate battery power in kilowatts."""
@@ -15,43 +19,43 @@ def calculate_battery_power(voltage, current):
 def evaluate_voltage(voltage):
     """Evaluate battery voltage and return status."""
     if voltage < 300:
-        return LOW
+        return Status.LOW
     elif voltage <= 450:
-        return NORMAL
+        return Status.NORMAL
     else:
-        return HIGH
+        return Status.HIGH
 
 def evaluate_current(current):
     """Evaluate current and return status."""
 
     if current < 25:
-        return LOW
+        return Status.LOW
     elif current <= 50:
-        return NORMAL
+        return Status.NORMAL
     else:
-        return HIGH   
+        return Status.HIGH   
 
 
 def evaluate_soc(soc):
     """Evaluate state of charge and return status."""
 
     if soc < 20:
-        return LOW
+        return Status.LOW
     elif soc <= 80:
-        return NORMAL
+        return Status.NORMAL
     else:
-        return HIGH
-    
+        return Status.HIGH
+
 
 def evaluate_temperature(temperature):
     """Evaluate battery temperature and return status."""
     if temperature < 45:
-        return NORMAL
+        return Status.NORMAL
     elif temperature <= 60:
-        return WARNING
+        return Status.WARNING
     else:
-        return CRITICAL
-    
+        return Status.CRITICAL
+
 def determine_battery_status(
     voltage_status,
     current_status,
@@ -60,14 +64,14 @@ def determine_battery_status(
 ):
     """Determine overall battery health status."""
 
-    if temperature_status == CRITICAL:
-        return CRITICAL
+    if temperature_status == Status.CRITICAL:
+        return Status.CRITICAL
 
-    elif temperature_status == WARNING:
-        return WARNING
+    elif temperature_status == Status.WARNING:
+        return Status.WARNING
 
     else:
-        return NORMAL
+        return Status.NORMAL
  
 
 def monitor_battery(voltage, current, temperature, soc):
@@ -86,9 +90,9 @@ def monitor_battery(voltage, current, temperature, soc):
         soc_status
     )
     
-    if battery_status == CRITICAL:
+    if battery_status == Status.CRITICAL:
         logger.critical("Battery status: CRITICAL")
-    elif battery_status == WARNING:
+    elif battery_status == Status.WARNING:
         logger.warning("Battery status: WARNING")
     else:
         logger.info("Battery status: NORMAL")
