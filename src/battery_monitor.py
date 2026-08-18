@@ -1,5 +1,6 @@
 from enum import Enum
 
+from src.battery_reading import BatteryReading
 from src.logger import setup_logger
 
 logger = setup_logger()
@@ -74,14 +75,14 @@ def determine_battery_status(
         return Status.NORMAL
  
 
-def monitor_battery(voltage, current, temperature, soc):
+def monitor_battery(reading: BatteryReading):
     """Monitor battery electrical and thermal conditions."""
 
-    power = calculate_battery_power(voltage, current)
-    voltage_status = evaluate_voltage(voltage)
-    current_status = evaluate_current(current)
-    soc_status = evaluate_soc(soc)
-    temperature_status = evaluate_temperature(temperature)
+    power = calculate_battery_power(reading.voltage, reading.current)
+    voltage_status = evaluate_voltage(reading.voltage)
+    current_status = evaluate_current(reading.current)
+    soc_status = evaluate_soc(reading.soc)
+    temperature_status = evaluate_temperature(reading.temperature)
     
     battery_status = determine_battery_status(
         voltage_status,
@@ -98,19 +99,21 @@ def monitor_battery(voltage, current, temperature, soc):
         logger.info("Battery status: NORMAL")
 
     return {
-        "voltage": voltage,
+        "voltage": reading.voltage,
         "voltage_status": voltage_status,
         
-        "current": current,
+        "current": reading.current,
         "current_status": current_status,
         
         "power": power,
         
-        "temperature": temperature,
+        "temperature": reading.temperature,
         "temperature_status": temperature_status,
         
-        "soc": soc,
+        "soc": reading.soc,
         "soc_status": soc_status,
+        
+        "timestamp": reading.timestamp,
         
         "battery_status": battery_status,
     }

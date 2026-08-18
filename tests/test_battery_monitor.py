@@ -1,5 +1,6 @@
 import unittest
 
+from src.battery_reading import BatteryReading
 from src.battery_monitor import (
     calculate_battery_power,
     evaluate_temperature,
@@ -10,6 +11,8 @@ from src.battery_monitor import (
     monitor_battery,
     Status
 )
+
+TEST_TIMESTAMP = "2026-08-18 21:00:00"
 
 class TestCalculatePower(unittest.TestCase):
     def test_normal_power(self):
@@ -149,22 +152,43 @@ class TestBatteryStatus(unittest.TestCase):
 
 class TestMonitorBattery(unittest.TestCase):
     def test_healthy_battery(self):
-        result = monitor_battery(400, 50, 35, 50)
-        
+        reading = BatteryReading(
+            voltage=400,
+            current=50,
+            temperature=35,
+            soc=50,
+            timestamp=TEST_TIMESTAMP
+        )
+        result = monitor_battery(reading)
+
         self.assertEqual(result["power"], 20.0)
         self.assertEqual(result["temperature_status"], Status.NORMAL)
         self.assertEqual(result["battery_status"], Status.NORMAL)
         
     
     def test_warm_battery(self):
-        result = monitor_battery(400, 50, 50, 50)
+        reading = BatteryReading(
+            voltage=400,
+            current=50,
+            temperature=50,
+            soc=50,
+            timestamp=TEST_TIMESTAMP
+        )
+        result = monitor_battery(reading)
         
         self.assertEqual(result["power"], 20.0)
         self.assertEqual(result["temperature_status"], Status.WARNING)
         self.assertEqual(result["battery_status"], Status.WARNING)
         
     def test_overheated_battery(self):
-        result = monitor_battery(400,50,65,50)
+        reading = BatteryReading(
+            voltage=400,
+            current=50,
+            temperature=65,
+            soc=50,
+            timestamp=TEST_TIMESTAMP
+        )
+        result = monitor_battery(reading)
         
         self.assertEqual(result["power"], 20.0)
         self.assertEqual(result["temperature_status"], Status.CRITICAL)

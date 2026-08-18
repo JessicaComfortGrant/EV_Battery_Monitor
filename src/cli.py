@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from src.battery_reading import BatteryReading
 from src.battery_monitor import monitor_battery
 
 def get_float_input(prompt, minimum=None, maximum=None):
@@ -27,7 +30,9 @@ def display_result(result):
     print("BATTERY MONITORING RESULT")
     print("-" * 40)
     
-    print(f"Voltage:             {result['voltage']:.2f} V")
+    print(f"Timestamp:            {result['timestamp']}")
+    
+    print(f"\nVoltage:             {result['voltage']:.2f} V")
     print(f"Voltage Status:      {result['voltage_status'].value}")
 
     print(f"\nCurrent:             {result['current']:.2f} A")
@@ -78,13 +83,15 @@ def main():
         maximum=100.0
         )
 
-    result = monitor_battery(
+    reading = BatteryReading(
         voltage=voltage,
         current=current,
         temperature=temperature,
-        soc=soc
+        soc=soc,
+        timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     )
-    
+    result = monitor_battery(reading)
+
     
     display_result(result)
 
