@@ -1,0 +1,13 @@
+"""Centralized battery monitoring thresholds."""
+
+VOLTAGE_MIN = 300
+VOLTAGE_MAX = 450
+
+CURRENT_MIN = 25
+CURRENT_MAX = 50
+
+SOC_MIN = 20
+SOC_MAX = 80
+
+TEMPERATURE_WARNING = 45
+TEMPERATURE_CRITICAL = 60

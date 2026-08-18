@@ -2,6 +2,16 @@ from enum import Enum
 
 from src.battery_reading import BatteryReading
 from src.logger import setup_logger
+from src.thresholds import (
+    VOLTAGE_MIN,
+    VOLTAGE_MAX,
+    CURRENT_MIN,
+    CURRENT_MAX,
+    SOC_MIN,
+    SOC_MAX,
+    TEMPERATURE_WARNING,
+    TEMPERATURE_CRITICAL
+)
 
 logger = setup_logger()
 
@@ -19,9 +29,9 @@ def calculate_battery_power(voltage, current):
 
 def evaluate_voltage(voltage):
     """Evaluate battery voltage and return status."""
-    if voltage < 300:
+    if voltage < VOLTAGE_MIN:
         return Status.LOW
-    elif voltage <= 450:
+    elif voltage <= VOLTAGE_MAX:
         return Status.NORMAL
     else:
         return Status.HIGH
@@ -29,9 +39,9 @@ def evaluate_voltage(voltage):
 def evaluate_current(current):
     """Evaluate current and return status."""
 
-    if current < 25:
+    if current < CURRENT_MIN:
         return Status.LOW
-    elif current <= 50:
+    elif current <= CURRENT_MAX:
         return Status.NORMAL
     else:
         return Status.HIGH   
@@ -40,9 +50,9 @@ def evaluate_current(current):
 def evaluate_soc(soc):
     """Evaluate state of charge and return status."""
 
-    if soc < 20:
+    if soc < SOC_MIN:
         return Status.LOW
-    elif soc <= 80:
+    elif soc <= SOC_MAX:
         return Status.NORMAL
     else:
         return Status.HIGH
@@ -50,9 +60,9 @@ def evaluate_soc(soc):
 
 def evaluate_temperature(temperature):
     """Evaluate battery temperature and return status."""
-    if temperature < 45:
+    if temperature < TEMPERATURE_WARNING:
         return Status.NORMAL
-    elif temperature <= 60:
+    elif temperature <= TEMPERATURE_CRITICAL:
         return Status.WARNING
     else:
         return Status.CRITICAL
